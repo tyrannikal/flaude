@@ -2,6 +2,7 @@ import argparse
 import os
 from dotenv import load_dotenv
 from google import genai
+from google.genai import types
 
 
 def main():
@@ -18,11 +19,12 @@ def main():
     args = parser.parse_args()
     # Now we can access `args.user_prompt`
 
+    messages = [types.Content(role="user", parts=[types.Part(text=args.user_prompt)])]
     print(f"User prompt: {args.user_prompt}")
 
     response = client.models.generate_content(
         model="gemini-2.5-flash",
-        contents=args.user_prompt,
+        contents=messages,
     )
     assert response.usage_metadata is not None, (
         "Response usage_metadata is None, likely failed api call"
